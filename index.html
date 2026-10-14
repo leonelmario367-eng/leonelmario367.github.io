@@ -145,7 +145,7 @@
     </div>
 
     <!-- QR CODE GENERATOR MODAL -->
-    <div id="qr-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div id="qr-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-start sm:items-center justify-center p-4 z-50 overflow-y-auto">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
             <!-- Close Button -->
             <button onclick="toggleQRModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2 rounded-full hover:bg-slate-800 transition-all">
@@ -182,7 +182,10 @@
                 </div>
                 <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
                     <span id="copy-status">Click para copiar URL actual</span>
-                    <button onclick="copyToClipboard()" class="text-amber-400 hover:underline">Copiar Link</button>
+                    <div class="flex gap-3">
+                        <button onclick="copyToClipboard()" class="text-amber-400 hover:underline">Copiar Link</button>
+                        <button onclick="downloadQRCode()" class="text-amber-400 hover:underline">Descargar QR</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -402,7 +405,7 @@
                 if (!urlInput.value) {
                     urlInput.value = window.location.href.startsWith('http') 
                         ? window.location.href 
-                        : 'https://literatura.arlt.realismo-trivia.app';
+                        : 'https://leonelmario367-eng.github.io/';
                 }
                 generateQRCode(urlInput.value);
             } else {
@@ -436,6 +439,27 @@
             }
         }
 
+        function downloadQRCode() {
+            const qrContainer = document.getElementById('qrcode');
+            const qrCanvas = qrContainer.querySelector('canvas');
+            const qrImage = qrContainer.querySelector('img');
+            const qrDataUrl = qrCanvas
+                ? qrCanvas.toDataURL('image/png')
+                : qrImage
+                    ? qrImage.src
+                    : '';
+
+            if (!qrDataUrl) {
+                document.getElementById('copy-status').textContent = 'No se pudo generar el QR.';
+                return;
+            }
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = qrDataUrl;
+            downloadLink.download = 'trivia-realismo-jorobadito-qr.png';
+            downloadLink.click();
+        }
+
         function copyToClipboard() {
             const urlInput = document.getElementById('qr-url-input');
             const copyStatus = document.getElementById('copy-status');
@@ -458,10 +482,3 @@
     </script>
 </body>
 </html>
-```eof
-
-### Características agregadas:
-1. **Generador y Visualizador de Código QR integrado:** En la esquina superior derecha se incluye un botón para desplegar la ventana modal del código QR (generado con `qrcode.js`).
-2. **Escaneo móvil y personalización:** Permite usar la URL actual de la página o ingresar una URL personalizada para adaptar el código QR al entorno donde esté alojada la trivia.
-3. **Estructura temáticamente vinculada:** Las 5 preguntas se basan en el Realismo literario, el entorno porteño de Roberto Arlt, la marginación y prejuicios sobre Rigoletto, y las presiones sociales y humanas.
-4. **Retroalimentación y animación:** Respuestas explicadas con análisis pedagógico e integración de fuegos artificiales/confeti al obtener puntajes destacados.
