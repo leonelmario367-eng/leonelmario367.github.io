@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia y QR: Realismo y El jorobadito</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- QRCode.js CDN for QR generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-3 sm:p-6">
+
+    <!-- Container Main Card -->
+    <div class="max-w-3xl w-full bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden relative my-auto">
+        
+        <!-- Glowing Top Bar Accent -->
+        <div class="h-2 w-full bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-500"></div>
+
+        <!-- Header Controls Bar -->
+        <div class="p-4 sm:p-6 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4 bg-slate-900/80 backdrop-blur-md">
+            <div>
+                <span class="text-[10px] sm:text-xs font-bold uppercase tracking-widest bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full">
+                    Literatura Hispanoamericana
+                </span>
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mt-1.5 text-slate-100">
+                    El Realismo y <span class="italic text-amber-400">El jorobadito</span>
+                </h1>
+            </div>
+
+            <!-- QR Toggle Modal Button -->
+            <button onclick="toggleQRModal()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                <span>Acceso QR Móvil</span>
+            </button>
+        </div>
+
+        <!-- Main Dynamic Content -->
+        <div class="p-5 sm:p-8">
+            
+            <!-- START SCREEN -->
+            <div id="start-screen" class="text-center py-4">
+                <div class="bg-slate-950/60 p-5 sm:p-6 rounded-2xl border border-slate-800 text-left mb-6 space-y-3">
+                    <h3 class="text-base sm:text-lg font-bold text-amber-400 flex items-center gap-2">
+                        <span>📖</span> ¿En qué consiste esta Trivia?
+                    </h3>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        Explorá a través de 5 preguntas interactivas los pilares del **Realismo literario** y su plasmación en el emblemático cuento de Roberto Arlt, **"El jorobadito"**.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 text-xs text-slate-400">
+                        <div class="flex items-center gap-2 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                            <span class="text-amber-400">✦</span> Representación de la vida cotidiana
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                            <span class="text-amber-400">✦</span> Entorno urbano de Buenos Aires
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                            <span class="text-amber-400">✦</span> Rechazo y discriminación a Rigoletto
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                            <span class="text-amber-400">✦</span> Presiones sociales y morbosidad humana
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="startGame()" class="flex-1 py-4 px-6 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-2xl transition-all shadow-xl hover:shadow-amber-500/10 text-base flex items-center justify-center gap-2">
+                        <span>Comenzar Trivia Ahora</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TRIVIA QUIZ SCREEN -->
+            <div id="quiz-screen" class="hidden">
+                <!-- Progress & Score Header -->
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-800 text-xs sm:text-sm font-semibold">
+                    <span id="question-counter" class="text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
+                        Pregunta 1 de 5
+                    </span>
+                    <span id="score-tracker" class="text-slate-400">
+                        Puntaje: <span class="text-white font-bold">0 pts</span>
+                    </span>
+                </div>
+
+                <!-- Question Title -->
+                <h2 id="question-text" class="text-base sm:text-xl font-semibold mb-6 text-slate-100 leading-snug"></h2>
+
+                <!-- Dynamic Option Buttons -->
+                <div id="options-container" class="space-y-3 mb-6"></div>
+
+                <!-- Immediate Feedback Panel -->
+                <div id="feedback-container" class="hidden mb-6 p-4 sm:p-5 rounded-2xl text-xs sm:text-sm border leading-relaxed"></div>
+
+                <!-- Next Question Button -->
+                <button id="next-btn" onclick="nextQuestion()" class="hidden w-full py-3.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2">
+                    <span>Siguiente Pregunta</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- RESULTS SCREEN -->
+            <div id="results-screen" class="hidden text-center py-4">
+                <div class="mb-6">
+                    <span class="text-6xl" id="result-emoji">🎉</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold mt-4 text-slate-100" id="result-title">¡Gran trabajo!</h2>
+                    <p class="text-slate-400 mt-2 text-xs sm:text-sm max-w-lg mx-auto" id="result-message"></p>
+                </div>
+
+                <div class="bg-slate-950/70 p-6 rounded-2xl border border-slate-800 max-w-xs mx-auto mb-6">
+                    <div class="text-4xl sm:text-5xl font-black text-amber-400 mb-1" id="final-score">0 / 5</div>
+                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Respuestas Correctas</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+                    <button onclick="restartGame()" class="flex-1 py-3.5 px-6 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl transition-all shadow-lg text-sm">
+                        Volver a Intentar
+                    </button>
+                    <button onclick="toggleQRModal()" class="flex-1 py-3.5 px-6 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold rounded-xl transition-all text-sm">
+                        Compartir por QR
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- QR CODE GENERATOR MODAL -->
+    <div id="qr-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+            <!-- Close Button -->
+            <button onclick="toggleQRModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2 rounded-full hover:bg-slate-800 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="text-center">
+                <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-100">Código QR de la Trivia</h3>
+                <p class="text-slate-400 text-xs mt-1">Escaneá este código para jugar directamente desde cualquier dispositivo móvil.</p>
+            </div>
+
+            <!-- QR Container Card -->
+            <div class="my-5 p-4 bg-white rounded-2xl flex items-center justify-center shadow-inner min-h-[200px]" id="qr-canvas-wrapper">
+                <div id="qrcode"></div>
+            </div>
+
+            <!-- Custom URL Input Section -->
+            <div class="space-y-3">
+                <label class="block text-left text-xs font-semibold text-slate-400">
+                    Enlace de la Trivia (personalizable para la clase):
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="qr-url-input" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amber-500/50 transition-all" placeholder="https://..." />
+                    <button onclick="updateQRCode()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shrink-0">
+                        Actualizar
+                    </button>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
+                    <span id="copy-status">Click para copiar URL actual</span>
+                    <button onclick="copyToClipboard()" class="text-amber-400 hover:underline">Copiar Link</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TRIVIA QUESTIONS DATA
+        const questions = [
+            {
+                question: "¿De qué manera el Realismo literario representa la sociedad y la vida cotidiana?",
+                options: [
+                    "Exhibe situaciones concretas de la vida diaria, retratando ambientes reconocibles, relaciones laborales y diferencias económicas sin idealizarlas.",
+                    "Evade la realidad cotidiana mediante escenarios fantásticos y héroes con capacidades sobrenaturales.",
+                    "Retrata únicamente la opulencia de la alta sociedad omitiendo cualquier conflicto de clases.",
+                    "Narra eventos históricos del pasado lejano sin vinculación alguna con los problemas sociales contemporáneos."
+                ],
+                correct: 0,
+                rationale: "El Realismo se enfoca en mostrar la cotidianidad, las tensiones sociales, los ambientes familiares y las brechas socioeconómicas de manera objetiva y directa."
+            },
+            {
+                question: "¿Qué vínculo fundamental establece la literatura realista entre sus relatos y la realidad social?",
+                options: [
+                    "Funciona únicamente como entretenimiento aislado de cualquier interpretación del entorno.",
+                    "Extrae problemas y dinámicas del entorno social y los transforma en historias que invitan a observar y reflexionar sobre la sociedad.",
+                    "Impone doctrinas científicas mediante personajes abstractos que no se relacionan con personas reales.",
+                    "Promueve la negación de los problemas sociales para mantener un orden idealizado."
+                ],
+                correct: 1,
+                rationale: "La literatura realista toma elementos tangibles del tejido social para construir narrativas que sirvan como espejo de crítica y análisis sobre las personas y sus problemas."
+            },
+            {
+                question: "¿Cuál es el marco espacial y social en el que se desarrolla 'El jorobadito' de Roberto Arlt?",
+                options: [
+                    "Un castillo medieval en Europa central.",
+                    "Un ambiente eminentemente urbano vinculado a la sociedad de Buenos Aires.",
+                    "Un ambiente rural bucólico centrado en la vida de campo.",
+                    "Una colonia de inmigrantes aislada en la selva."
+                ],
+                correct: 1,
+                rationale: "'El jorobadito' se enmarca en la urbe porteña (Buenos Aires), exponiendo los estratos urbanos, las costumbres burguesas y la marginalidad de la época."
+            },
+            {
+                question: "¿Qué elementos de discriminación y rechazo social sufre el personaje de Rigoletto en 'El jorobadito'?",
+                options: [
+                    "Es rechazado y humillado de manera constante por su aspecto físico y su deformidad.",
+                    "Es discriminado únicamente por su falta de títulos nobiliarios.",
+                    "Es marginado por hablar un idioma extranjero que nadie comprende.",
+                    "Es aplaudido y respetado por toda la sociedad debido a su gran belleza física."
+                ],
+                correct: 0,
+                rationale: "En el cuento, Rigoletto es objeto de morbo, rechazo y cruel discriminación por parte de la sociedad debido a su deformidad física (su joroba)."
+            },
+            {
+                question: "¿De qué forma se abordan los conflictos humanos y familiares en la obra de Roberto Arlt?",
+                options: [
+                    "Presentando personajes perfectos que resuelven sus dilemas mediante la piedad y la cortesía.",
+                    "Exponiendo los pensamientos oscuros, la hipocresía social, la crueldad y las presiones familiares de forma descarnada.",
+                    "Ocultando las pasiones humanas para evitar incomodar a las familias burguesas.",
+                    "Transformando todos los diálogos en poemas de amor romántico tradicional."
+                ],
+                correct: 1,
+                rationale: "Roberto Arlt caracteriza el Realismo crítico al exponer sin tapujos los conflictos morales, la mezquindad, la hipocresía de las relaciones amorosas/familiares y la violencia psicológica."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let qrCodeInstance = null;
+
+        // DOM ELEMENTS
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionCounter = document.getElementById('question-counter');
+        const scoreTracker = document.getElementById('score-tracker');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const nextBtn = document.getElementById('next-btn');
+
+        // GAME LOGIC
+        function startGame() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            currentQuestion = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            feedbackContainer.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const q = questions[currentQuestion];
+            questionCounter.textContent = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+            scoreTracker.innerHTML = `Puntaje: <span class="text-white font-bold">${score * 20} pts</span>`;
+            questionText.textContent = q.question;
+
+            optionsContainer.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-950/80 hover:bg-slate-800/80 text-slate-200 text-xs sm:text-sm font-medium transition-all flex items-start justify-between gap-3 group shadow-sm hover:border-slate-700';
+                btn.innerHTML = `
+                    <span class="leading-relaxed">${option}</span>
+                    <span class="w-5 h-5 rounded-full border border-slate-700 flex items-center justify-center text-[10px] shrink-0 mt-0.5 group-hover:border-amber-400 group-hover:text-amber-400 font-bold">
+                        ${String.fromCharCode(65 + index)}
+                    </span>
+                `;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(index, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentQuestion];
+            const buttons = optionsContainer.getElementsByTagName('button');
+
+            if (index === q.correct) {
+                score++;
+                selectedBtn.className = 'w-full text-left p-4 rounded-xl border border-emerald-500/80 bg-emerald-500/10 text-emerald-200 text-xs sm:text-sm font-medium flex items-start justify-between gap-3 shadow-lg shadow-emerald-500/5';
+                selectedBtn.querySelector('span:last-child').className = 'w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-xs shrink-0 mt-0.5';
+                selectedBtn.querySelector('span:last-child').textContent = '✓';
+                
+                feedbackContainer.className = 'mb-6 p-4 rounded-2xl text-xs sm:text-sm border bg-emerald-950/40 border-emerald-500/30 text-emerald-300 space-y-1';
+                feedbackContainer.innerHTML = `<div class="font-bold text-emerald-400 flex items-center gap-1.5"><span>✓</span> ¡Respuesta Correcta!</div><div>${q.rationale}</div>`;
+            } else {
+                selectedBtn.className = 'w-full text-left p-4 rounded-xl border border-rose-500/80 bg-rose-500/10 text-rose-200 text-xs sm:text-sm font-medium flex items-start justify-between gap-3 shadow-lg shadow-rose-500/5';
+                selectedBtn.querySelector('span:last-child').className = 'w-5 h-5 rounded-full bg-rose-500 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5';
+                selectedBtn.querySelector('span:last-child').textContent = '✕';
+
+                // Highlight correct option
+                buttons[q.correct].className = 'w-full text-left p-4 rounded-xl border border-emerald-500/80 bg-emerald-500/10 text-emerald-200 text-xs sm:text-sm font-medium flex items-start justify-between gap-3';
+                buttons[q.correct].querySelector('span:last-child').className = 'w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-xs shrink-0 mt-0.5';
+                buttons[q.correct].querySelector('span:last-child').textContent = '✓';
+
+                feedbackContainer.className = 'mb-6 p-4 rounded-2xl text-xs sm:text-sm border bg-rose-950/40 border-rose-500/30 text-rose-300 space-y-1';
+                feedbackContainer.innerHTML = `<div class="font-bold text-rose-400 flex items-center gap-1.5"><span>✕</span> Respuesta Incorrecta</div><div>${q.rationale}</div>`;
+            }
+
+            scoreTracker.innerHTML = `Puntaje: <span class="text-white font-bold">${score * 20} pts</span>`;
+            feedbackContainer.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            // Disable pointer events for buttons
+            for (let btn of buttons) {
+                btn.style.cursor = 'default';
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+
+            document.getElementById('final-score').textContent = `${score} / ${questions.length}`;
+            
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+            const emoji = document.getElementById('result-emoji');
+
+            if (score === 5) {
+                emoji.textContent = '🏆';
+                title.textContent = '¡Excelente dominio del tema!';
+                message.textContent = 'Comprendés a la perfección la representación de la sociedad, la crítica al prejuicio hacia Rigoletto y el realismo urbano de Roberto Arlt.';
+                triggerConfetti();
+            } else if (score >= 3) {
+                emoji.textContent = '👏';
+                title.textContent = '¡Muy buen resultado!';
+                message.textContent = 'Tenés muy claros los conceptos fundamentales sobre el Realismo y los conflictos sociales presentes en "El jorobadito".';
+            } else {
+                emoji.textContent = '📚';
+                title.textContent = '¡A seguir explorando!';
+                message.textContent = 'Te recomendamos repasar los aspectos de la sociedad, las presiones urbanas y el trato a Rigoletto en la literatura realista.';
+            }
+        }
+
+        function restartGame() {
+            resultsScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // QR CODE MODAL & GENERATOR LOGIC
+        function toggleQRModal() {
+            const modal = document.getElementById('qr-modal');
+            const isHidden = modal.classList.contains('hidden');
+            
+            if (isHidden) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                
+                // Set default input URL to window location or placeholder
+                const urlInput = document.getElementById('qr-url-input');
+                if (!urlInput.value) {
+                    urlInput.value = window.location.href.startsWith('http') 
+                        ? window.location.href 
+                        : 'https://literatura.arlt.realismo-trivia.app';
+                }
+                generateQRCode(urlInput.value);
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function generateQRCode(text) {
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = ''; // Clear previous QR
+
+            try {
+                qrCodeInstance = new QRCode(qrContainer, {
+                    text: text,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (err) {
+                console.error("Error al generar código QR:", err);
+            }
+        }
+
+        function updateQRCode() {
+            const inputVal = document.getElementById('qr-url-input').value.trim();
+            if (inputVal) {
+                generateQRCode(inputVal);
+            }
+        }
+
+        function copyToClipboard() {
+            const urlInput = document.getElementById('qr-url-input');
+            const copyStatus = document.getElementById('copy-status');
+            
+            // Execute copy
+            const tempInput = document.createElement('input');
+            tempInput.value = urlInput.value;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            copyStatus.textContent = "¡Copiado con éxito!";
+            copyStatus.classList.add('text-amber-400');
+            setTimeout(() => {
+                copyStatus.textContent = "Click para copiar URL actual";
+                copyStatus.classList.remove('text-amber-400');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+```eof
+
+### Características agregadas:
+1. **Generador y Visualizador de Código QR integrado:** En la esquina superior derecha se incluye un botón para desplegar la ventana modal del código QR (generado con `qrcode.js`).
+2. **Escaneo móvil y personalización:** Permite usar la URL actual de la página o ingresar una URL personalizada para adaptar el código QR al entorno donde esté alojada la trivia.
+3. **Estructura temáticamente vinculada:** Las 5 preguntas se basan en el Realismo literario, el entorno porteño de Roberto Arlt, la marginación y prejuicios sobre Rigoletto, y las presiones sociales y humanas.
+4. **Retroalimentación y animación:** Respuestas explicadas con análisis pedagógico e integración de fuegos artificiales/confeti al obtener puntajes destacados.
